@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.Comentario;
 import java.sql.ResultSet;
@@ -13,35 +14,36 @@ public class ComentarioDAO {
 	private Connection conexao;
 	
 	public ComentarioDAO() {
+		new ConnectionFactory();
 		this.conexao = ConnectionFactory.conectar();
 	}
 	
 	public void cadastrar (Comentario comentario) {
 		
 		String inserir = "INSERT INTO comentario " 
-		                  + " (idNoticia, nome, texto) " 
+		                  + " (fk_noticia_id, nome, texto) " 
 				          + " VALUES (?,?,?) ";
 		
 		try (PreparedStatement pst =
 				conexao.prepareStatement(inserir)) {
 			
-			pst.setInt(1, comentario.getIdNoticia());
+			pst.setInt(1, comentario.getPk());
 			pst.setString(2, comentario.getNome());
 			pst.setString(3, comentario.getTexto());
 			
 			pst.execute();
 			
-		} 
-		
-		catch (SQLException ex) {
-			
-			System.err.println("Não foi possível manipular "
-					+ "a tabela Comentario");
-			ex.printStackTrace();
+		} catch (Exception s) {
+			s.printStackTrace();
+		try {
+			conexao.rollback();
+		} catch (SQLException ex) {
+			System.out.println(ex.getStackTrace());
 		}
+	  }
 	}
 		
-		public void alterar (Comentario comentario) {
+		/*public void alterar (Comentario comentario) {
 			
 			String inserir = "UPDATE comentario "
 					+ "SET nome = ?, texto = ? "
@@ -117,37 +119,31 @@ public class ComentarioDAO {
 				
 				return null;
 			}
-		}
+		}*/
 		
-		public ArrayList<Comentario> listarComentario() {
+		public List<Comentario> listarComentario(Integer id) {
 			
-			String inserir = "SELECT * FROM comentario";
+			String insertion = "SELECT * FROM comentario WHERE fk_noticia_id = ?";
+			
+			List<Comentario> lista = new ArrayList<>();
 			
 			try (PreparedStatement pst = 
-					conexao.prepareStatement(inserir)) {
+					conexao.prepareStatement(insertion)) {
+				
+				pst.setInt(1, id);
 				
 				ResultSet resultado = pst.executeQuery();
-				
-				ArrayList<Comentario> lista = new ArrayList<>();
 				
 				while(resultado.next()) {
 					Comentario p = new Comentario();
 					p.setTexto(resultado.getString("texto"));
-					p.setIdNoticia(resultado.getInt("idNoticia"));
 					p.setNome(resultado.getString("nome"));
 					lista.add(p);
 				}
-				return lista;
+			} catch (SQLException ex) {
 				
-			} 
-			
-			catch (SQLException ex) {
-				
-				System.err.println("Não foi possível manipular "
-						+ "a tabela Comentario ");
 				ex.printStackTrace();
-				
-				return null;
+			}
+				return lista;
 			}
 		}
-	}

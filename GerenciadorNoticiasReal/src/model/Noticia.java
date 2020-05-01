@@ -4,14 +4,14 @@ public class Noticia implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private int id = -1;
+	private Integer id;
 	private String descricao;
 	private String titulo;
 	private String texto;
 	
 	public Noticia() {}
 	
-	public Noticia(int id, String descricao, String titulo, String texto) {
+	/*public Noticia(int id, String descricao, String titulo, String texto) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
@@ -19,14 +19,14 @@ public class Noticia implements java.io.Serializable {
 		this.texto = texto;
 	}
 	
-	public boolean isValid() {
+	/*public boolean isValid() {
 		return this.id != -1 && this.titulo != null && this.descricao != null && this.texto != null;
-	}
+	}*/
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

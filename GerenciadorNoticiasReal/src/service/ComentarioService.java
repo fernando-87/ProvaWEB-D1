@@ -1,6 +1,6 @@
 package service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import dao.ComentarioDAO;
 import model.Comentario;
@@ -14,22 +14,10 @@ public class ComentarioService {
 	}
 	
 	public void cadastrar(Comentario comentario) {
-		this.comentarioDAO.cadastrar(comentario);
+		comentarioDAO.cadastrar(comentario);
 	}
 	
-	public void alterar(Comentario comentario) {
-		this.comentarioDAO.alterar(comentario);
-	}
-	
-	public void excluir(Comentario comentario) {
-		this.comentarioDAO.excluir(comentario);
-	}
-	
-	public Comentario consultar(int idNoticia) {
-		return this.comentarioDAO.consultar(idNoticia);
-	}
-	
-	public ArrayList<Comentario> listarComentario() {
-		return this.comentarioDAO.listarComentario();
+	public List<Comentario> listar(Integer id) {
+		return comentarioDAO.listarComentario(id);
 	}
 }

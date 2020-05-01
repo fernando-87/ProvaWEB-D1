@@ -15,17 +15,14 @@ import service.ComentarioService;
 public class ComentariosNoticia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
  
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int idNoticia = Integer.parseInt(request.getParameter("id_noticia"));
-		String nome = request.getParameter("nome_usuario");
-		String texto = request.getParameter("texto_comentario");
+		Integer pk = Integer.parseInt(request.getParameter("pk"));
 		
 		Comentario comentario = new Comentario();
-		
-		comentario.setIdNoticia(idNoticia);
-		comentario.setNome(nome);
-	    comentario.setTexto(texto);
+		comentario.setPk(pk);
+		comentario.setNome(request.getParameter("nome_usuario"));
+	    comentario.setTexto(request.getParameter("texto_comentario"));
 		
 		ComentarioService comentarioService = new ComentarioService();
 		comentarioService.cadastrar(comentario);

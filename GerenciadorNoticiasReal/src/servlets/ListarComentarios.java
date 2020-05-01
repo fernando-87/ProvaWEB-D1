@@ -2,16 +2,19 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.Comentario;
+import model.Noticia;
 import service.ComentarioService;
+import service.NoticiaService;
 
 @WebServlet("/ListarComentarios.do")
 public class ListarComentarios extends HttpServlet {
@@ -19,80 +22,57 @@ public class ListarComentarios extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		NoticiaService noticiaService = new NoticiaService();
+		
+		List<Noticia> listaNoticia = noticiaService.listar();
+		
+		for (Noticia noticia : listaNoticia) {
+			
+			response.getWriter().println("<h1>" + noticia.getTitulo() + "</h1>" 
+			+ "<h3>" + noticia.getDescricao() + "</h3>" 
+					+ "<p>" + noticia.getTexto() + "</p>");
+		
 		ComentarioService comentarioService = new ComentarioService();
+		List<Comentario> listaComentario = comentarioService.listar(noticia.getId());
+		HttpSession sessao = request.getSession();
+		sessao.setAttribute("pk", noticia.getId());
+		for (Comentario comentario : listaComentario) {
+			
+			response.getWriter().println("<hr/>" + "<h5> Nome: " + comentario.getNome() + "</h5>"
+			+ "<p> Texto: " + comentario.getTexto() + "</p>"+"<hr/>");
+		}
 		
-		ArrayList<Comentario>listaComentario = null;
-		
-		listaComentario = comentarioService.listarComentario();
-		
-		response.setContentType("text/html");
-		
-		PrintWriter saida = response.getWriter();
-		
-		/*saida.println("<form action='ListarComentarios.do' method='post'> ");
-		saida.println("Id: " + comentario.getIdNoticia());
-		saida.println("<input type='hidden' name='id_noticia' value= '"
-				+ comentario.getIdNoticia() + "'> <br>");
-		saida.println("Nome:");
-		saida.println("<input type='text' name='nome_usuario' value= '"
-				+ comentario.getNome() + "'> <br> ");
-		saida.println("Texto: ");
-		saida.println("<input type='text' name='texto_comentario' value='"
-				+ comentario.getTexto() + "'> <br> ");
-		saida.println("<input type='submit'> ");
-		saida.println("</form> ");*/
-		
-		saida.println("<html>");
-		saida.println("<body>");
-		saida.println("<table>");
-		
-		listaComentario.forEach(
-				p -> {
-					saida.println("<tr>");
-					saida.println("<td>");
-					saida.println("Id:");
-					saida.println("</td>");
-					saida.println("<td>");
-					saida.println(p.getIdNoticia());
-					saida.println("</td>");
-					saida.println("<td>");
-					saida.println("Nome:");
-					saida.println("</td>");
-					saida.println("<td>");
-					saida.println(p.getNome());
-					saida.println("</td>");
-					saida.println("<td>");
-					saida.println("Texto");
-					saida.println("</td>");
-					saida.println("<td>");
-					saida.println(p.getTexto());
-					saida.println("</td>");
-					
-					saida.println("<td>");
-					saida.println("<a href='index2.html'?id_noticia="
-							+ p.getIdNoticia() +  "'> Entrar </a> ");
-					saida.println("</td>");
-					
-					saida.println("</tr>");
-	             }
-			);
-		
-			saida.println("</table>");
+		/*response.getWriter().println("<form method=\"post\" action=\"ComentariosNoticia.do\">" 
+		+ "<br/>" 
+		+ "<br/>" 
+		+ "<small> <p> Adicionar comentário: </p> </small>"
+		+"<p><small> Nome: <small></p>"
+		+"<input type=\"text\" value=\"\" name=\"nome_usuario\" />"
+		+"<br/"
+		+"<br/>"
+		+"<p><small> Texto: <small></p>"
+		+"<input type=\text\" value=\"\" name=\"texto_comentario\" />"
+		+ "<input type=\"submit\" value=\"Enviar\" />"
+		+ "</form>"+"<hr/>");
+	  }*/
+		}
 	}
-}
-		/*List<Noticia> noticia = noticiaService.listarRealNews();
-		PrintWriter saida = response.getWriter();
-		response.getWriter().println("<a href='ListarNoticia.do'></a>");
 		
-		saida.println("<h1>REAL NEWS</h1>");
-		saida.println("<h2>Os destaques das notícias da semana</h2>");
-		if(noticia.isEmpty()) {
-			saida.println("<p>Não há notícias</p>");
-		} else {
-			for (Noticia Noticia : noticia) {
-			saida.println("<p> Titulo: <a href='ComentarioNoticia.do?id" + ((model.Noticia) noticia).getId() + "'>" + ((model.Noticia) noticia).getTitulo() + "</p>");
-			saida.println("<p> Descricao: " + ((model.Noticia) noticia).getDescricao() + "</p");
-			saida.println("<p> Texto: " + ((model.Noticia) noticia).getTexto() + "</p>");
-			saida.println("<hr>");
-			}
-		}*/
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		    
+	        Integer pk = Integer.parseInt(request.getParameter("pk_noticia"));
+	        	
+			Comentario comentario = new Comentario();
+			comentario.setPk(pk);
+			comentario.setTexto(request.getParameter("texto_comentario"));
+			comentario.setNome(request.getParameter("nome_usuario"));
+			
+			ComentarioService comentarioService = new ComentarioService();
+			comentarioService.cadastrar(comentario);
+			
+			PrintWriter resposta = response.getWriter();
+			resposta.println("Cadastrado com sucesso");
+		
+		
+  }
+}

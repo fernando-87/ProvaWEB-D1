@@ -16,12 +16,13 @@ import service.NoticiaService;
 public class AlterarNoticia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	/*protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int id = Integer.parseInt(request.getParameter("id_noticia"));
+		Integer id = Integer.parseInt(request.getParameter("id_noticia"));
 		
 		NoticiaService noticiaService = new NoticiaService();
-		Noticia noticia = noticiaService.consultar(id);
+		
+		Noticia noticia = noticiaService.listar();
 		
 		response.setContentType("text/html");
 		
@@ -41,23 +42,20 @@ public class AlterarNoticia extends HttpServlet {
 				+ noticia.getTexto() + "'> <br> ");
 		saida.println("<input type='submit'> ");
 		saida.println("</form> ");
-	}
+	}*/
 	
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		int id = Integer.parseInt(request.getParameter("id_noticia"));
-        String descricao = request.getParameter("descricao_noticia");
-        String titulo = request.getParameter("titulo_noticia");
-        String texto = request.getParameter("texto_noticia");
-        
+	    
+        Integer id = Integer.parseInt(request.getParameter("id_noticia"));
+        	
 		Noticia noticia = new Noticia();
 		noticia.setId(id);
-		noticia.setDescricao(descricao);
-		noticia.setTitulo(titulo);
-		noticia.setTexto(texto);
+		noticia.setDescricao(request.getParameter("descricao_noticia"));
+		noticia.setTitulo(request.getParameter("titulo_noticia"));
+		noticia.setTexto(request.getParameter("texto_noticia"));
 		
 		NoticiaService noticiaService = new NoticiaService();
-		noticiaService.alterar(noticia);
+		noticiaService.alterar(id, noticia);
 		
 		PrintWriter resposta = response.getWriter();
 		resposta.println("Alterado com sucesso");

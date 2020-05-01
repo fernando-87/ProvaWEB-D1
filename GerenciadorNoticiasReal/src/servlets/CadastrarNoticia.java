@@ -15,19 +15,15 @@ import service.NoticiaService;
 public class CadastrarNoticia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-		int id = Integer.parseInt(request.getParameter("id_noticia"));
-		String titulo = request.getParameter("titulo_noticia");
-		String descricao = request.getParameter("descricao_noticia");
-		String texto = request.getParameter("texto_noticia");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+		Integer id = Integer.parseInt(request.getParameter("id_noticia"));
 		
 		Noticia noticia = new Noticia();
-		
 		noticia.setId(id);
-		noticia.setTitulo(titulo);
-		noticia.setDescricao(descricao);
-		noticia.setTexto(texto);
+		noticia.setTitulo(request.getParameter("titulo_noticia"));
+		noticia.setDescricao(request.getParameter("descricao_noticia"));
+		noticia.setTexto(request.getParameter("texto_noticia"));
 		
 		NoticiaService noticiaService = new NoticiaService();
 		noticiaService.cadastrar(noticia);

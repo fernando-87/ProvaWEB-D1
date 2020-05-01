@@ -1,39 +1,27 @@
 package service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import dao.NoticiaDAO;
 import model.Noticia;
 
 public class NoticiaService {
 	
-	private NoticiaDAO noticiaDAO;
-
-		public NoticiaService() {
-			this.noticiaDAO = new NoticiaDAO();
+	    private NoticiaDAO noticiaDAO = new NoticiaDAO();
+	    
+	    public void cadastrar (Noticia noticia) {
+	    	noticiaDAO.cadastrarNoticia(noticia);
+	    }
+	    
+	    public List<Noticia> listar() {
+	    	return noticiaDAO.listarNoticia();
+	    }
+	    		
+		public void alterar(Integer id, Noticia noticia) {
+			noticiaDAO.alterar(id, noticia);
 		}
 		
-		public void cadastrar(Noticia noticia) {
-			this.noticiaDAO.cadastrar(noticia);
-		}
-		
-		public void alterar(Noticia noticia) {
-			this.noticiaDAO.alterar(noticia);
-		}
-		
-		public void excluir(Noticia noticia) {
-			this.noticiaDAO.excluir(noticia);
-		}
-		
-		public Noticia consultar(int id) {
-			return this.noticiaDAO.consultar(id);
-		}
-		
-		public ArrayList<Noticia> listarRealNews() {
-			return this.noticiaDAO.listarNoticia();
-		}
-
-		public boolean isValid() {
-			return false;
+		public void excluir(Integer id) {
+			noticiaDAO.excluir(id);
 		}
 }

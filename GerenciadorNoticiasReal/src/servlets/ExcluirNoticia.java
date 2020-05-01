@@ -9,22 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.Noticia;
 import service.NoticiaService;
 
 @WebServlet("/ExcluirNoticia.do")
 public class ExcluirNoticia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-	    int id = Integer.parseInt(request.getParameter("id_noticia"));
-		
-		Noticia noticia = new Noticia();
-		noticia.setId(id);
-		
+	    Integer id = Integer.parseInt(request.getParameter("id_noticia"));
+	
 		NoticiaService noticiaService = new NoticiaService();
-		noticiaService.excluir(noticia);
+		noticiaService.excluir(id);
 		
 		PrintWriter saida = response.getWriter();
 		saida.println("Excluído com sucesso");

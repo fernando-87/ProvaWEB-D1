@@ -4,25 +4,25 @@ public class Comentario implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int idNoticia = -1;
+	private Integer pk;
 	private String nome;
 	private String texto;
 	
 	public Comentario() {}
 	
-	public Comentario(int idNoticia, String nome, String texto) {
+	/*public Comentario(Integer pk, String nome, String texto) {
 		super();
-		this.idNoticia = idNoticia;
+		this.pk = pk;
 		this.nome = nome;
 		this.texto = texto;
+	}*/
+	
+	public Integer getPk() {
+		return pk;
 	}
 	
-	public int getIdNoticia() {
-		return idNoticia;
-	}
-	
-	public void setIdNoticia(int idNoticia) {
-		this.idNoticia = idNoticia;
+	public void setPk(Integer pk) {
+		this.pk = pk;
 	}
 	
 	public String getNome() {
